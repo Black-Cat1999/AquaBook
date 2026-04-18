@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>AquaBook | Support & FAQ</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+  <header>
+    <div class="nav-container">
+      <div class="logo">AquaBook</div>
+      <nav>
+        <ul class="nav-links">
+          <li><a href="index.html">Home</a></li>
+          <li><a href="facilities.html">Facilities</a></li>
+          <li><a href="about.html">About Us</a></li>
+          <li><a href="support.html">Contact/FAQ</a></li>
+          <li><button id="theme-toggle-btn" class="theme-toggle">🌙 Dark Mode</button></li>
+        </ul>
+      </nav>
+    </div>
+  </header>
+
+  <main>
+    <section class="section">
+      <div class="contact-container">
+
+        <!-- Contact Form (Feature 2 & 5) -->
+        <div class="contact-form-section">
+          <h2 style="color: var(--primary-color); margin-bottom: 20px;">Get In Touch</h2>
+          <form id="contact-form">
+            <div class="form-group">
+              <label for="name">Full Name</label>
+              <input type="text" id="name" required placeholder="John Doe">
+            </div>
+            <div class="form-group">
+              <label for="email">Email Address</label>
+              <input type="email" id="email" required placeholder="john@example.com">
+            </div>
+            <div class="form-group" style="position: relative;">
+              <label for="message">Message</label>
+              <!-- maxlength prevents typing beyond 200, but the JS live counter updates dynamically -->
+              <textarea id="message" maxlength="200" required placeholder="How can we help?"></textarea>
+              <span class="char-counter" id="char-count">200 characters remaining</span>
+            </div>
+            <button type="submit" class="btn">Send Message</button>
+          </form>
+        </div>
+
+        <!-- Currency Converter (Feature 7) -->
+        <div class="currency-section">
+          <h2 style="color: var(--primary-color); margin-bottom: 20px;">International Visitors</h2>
+          <p style="margin-bottom: 20px;">Planning a visit from abroad? Our standard table rental is $50 USD. Convert to
+            your local currency below:</p>
+
+          <div class="currency-widget">
+            <input type="number" id="currency-amount" value="50" min="1" placeholder="Amount in USD">
+            <span>USD to</span>
+            <select id="currency-select">
+              <option value="EUR">EUR - Euro</option>
+              <option value="GBP">GBP - British Pound</option>
+              <option value="INR">INR - Indian Rupee</option>
+              <option value="AUD">AUD - Australian Dollar</option>
+              <option value="CAD">CAD - Canadian Dollar</option>
+              <option value="JPY">JPY - Japanese Yen</option>
+            </select>
+            <button id="convert-btn" class="btn" style="display: block; width: 100%; margin-top: 15px;">Convert</button>
+            <div class="result-display" id="conversion-result"></div>
+          </div>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- Collapsible FAQ Section (Feature 4) -->
+    <section class="section" style="padding-top: 0;">
+      <h2 class="section-title">Frequently Asked Questions</h2>
+      <div class="faq-container">
+
+        <div class="faq-item">
+          <div class="faq-question">
+            <span>Do I need to bring my own cue?</span>
+            <span>+</span>
+          </div>
+          <div class="faq-answer">
+            <p>No, we provide high-quality, balanced house cues and fresh chalk for all visitors at the reception.</p>
+          </div>
+        </div>
+
+        <div class="faq-item">
+          <div class="faq-question">
+            <span>Can I cancel my table booking?</span>
+            <span>+</span>
+          </div>
+          <div class="faq-answer">
+            <p>Yes, you can cancel up to 24 hours before your slot for a full refund. Same-day cancellations are
+              non-refundable.</p>
+          </div>
+        </div>
+
+        <div class="faq-item">
+          <div class="faq-question">
+            <span>Are the tables perfectly leveled?</span>
+            <span>+</span>
+          </div>
+          <div class="faq-answer">
+            <p>Absolutely. Our 8-ball and snooker tables are professionally leveled weekly to ensure tournament-grade
+              play.</p>
+          </div>
+        </div>
+
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    <p>&copy; 2026 AquaBook Booking. Created for Full Stack Mini Project.</p>
+  </footer>
+
+  <script src="main.js"></script>
+</body>
+
+</html>

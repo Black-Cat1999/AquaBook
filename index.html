@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>AquaBook | Premium Pool Booking</title>
+  <meta name="description" content="Book top-tier swimming pools for casual dips or competitive training.">
+  <link rel="stylesheet" href="style.css">
+  <style>
+    /* Page specific CSS */
+    .hero {
+      /* Once you add the image, it will show up here */
+      background: linear-gradient(rgba(26, 11, 46, 0.7), rgba(26, 11, 46, 0.8)), url('images/hero.png') center/cover no-repeat;
+      min-height: 80vh;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      text-align: center;
+      padding: 0 20px;
+    }
+
+    .hero h1 {
+      font-size: 4rem;
+      margin-bottom: 20px;
+      color: #fff;
+    }
+
+    .hero p {
+      font-size: 1.2rem;
+      max-width: 600px;
+      margin-bottom: 30px;
+      color: #ddd;
+    }
+
+    .features-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 30px;
+    }
+
+    .feature-card {
+      background-color: var(--card-bg);
+      padding: 30px;
+      border-radius: 10px;
+      border: 1px solid var(--border-color);
+      text-align: center;
+      transition: transform 0.3s ease;
+    }
+
+    .feature-card:hover {
+      transform: translateY(-5px);
+    }
+
+    .feature-card h3 {
+      color: var(--primary-color);
+      margin-bottom: 15px;
+    }
+
+    /* Testimonials */
+    .testimonials {
+      background-color: var(--card-bg);
+      border-top: 1px solid var(--border-color);
+      border-bottom: 1px solid var(--border-color);
+    }
+
+    .testi-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 30px;
+    }
+
+    .testi-card {
+      background-color: var(--bg-color);
+      padding: 25px;
+      border-radius: 10px;
+      border-left: 4px solid var(--primary-color);
+    }
+
+    .testi-card p {
+      font-style: italic;
+      margin-bottom: 15px;
+    }
+
+    .testi-author {
+      font-weight: 600;
+      color: var(--primary-color);
+    }
+
+    footer {
+      background-color: var(--nav-bg);
+      text-align: center;
+      padding: 30px 20px;
+      border-top: 1px solid var(--border-color);
+    }
+  </style>
+</head>
+
+<body>
+
+  <!-- Navigation -->
+  <header>
+    <div class="nav-container">
+      <div class="logo">AquaBook</div>
+      <nav>
+        <ul class="nav-links">
+          <li><a href="index.html">Home</a></li>
+          <li><a href="facilities.html">Facilities</a></li>
+          <li><a href="about.html">About Us</a></li>
+          <li><a href="support.html">Contact/FAQ</a></li>
+          <li><button id="theme-toggle-btn" class="theme-toggle">🌙 Dark Mode</button></li>
+        </ul>
+      </nav>
+    </div>
+  </header>
+
+  <!-- Hero Section -->
+  <main>
+    <section class="hero">
+      <h1>Break with Excellence</h1>
+      <p>Reserve world-class premium Snooker and 8-Ball Pool tables by the hour. Whether it's league training or casual
+        play, find your perfect table with AquaBook.</p>
+      <a href="#" class="btn open-modal-btn">Book a Table Now</a>
+    </section>
+
+    <!-- Features Section -->
+    <section class="section">
+      <h2 class="section-title">Why Play With Us?</h2>
+      <div class="features-grid">
+        <div class="feature-card">
+          <h3>Tournament Grade</h3>
+          <p>Experience championship-level slate tables prepared meticulously for professional play.</p>
+        </div>
+        <div class="feature-card">
+          <h3>Premium Cues & Baize</h3>
+          <p>We supply state-of-the-art house cues and perfectly maintained Simonis cloth on all tables.</p>
+        </div>
+        <div class="feature-card">
+          <h3>24/7 Access</h3>
+          <p>Early bird or night owl? We've got you covered with around-the-clock booking availability.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- Testimonials Section -->
+    <section class="section testimonials">
+      <h2 class="section-title">What Players Say</h2>
+      <div class="testi-grid">
+        <div class="testi-card">
+          <p>"The best club in town! The tables are perfectly leveled and the staff is super helpful."</p>
+          <div class="testi-author">- Sarah Jenkins</div>
+        </div>
+        <div class="testi-card">
+          <p>"I love the private VIP rooms. Nothing beats an evening game here with friends."</p>
+          <div class="testi-author">- Mark T.</div>
+        </div>
+        <div class="testi-card">
+          <p>"Booking a table online is seamless. The dark mode theme is a nice touch too!"</p>
+          <div class="testi-author">- Emily R.</div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <!-- Footer -->
+  <footer>
+    <p>&copy; 2026 AquaBook Booking. Created for Full Stack Mini Project.</p>
+  </footer>
+
+  <!-- Booking Modal (Feature 6) -->
+  <div class="modal" id="booking-modal">
+    <div class="modal-content">
+      <span class="close-btn">&times;</span>
+      <h2 style="color: var(--primary-color); margin-bottom: 15px;">Quick Reservation</h2>
+      <p>Please enter your details to reserve a table. A confirmation email will be sent to you shortly.</p>
+      <form style="display: flex; flex-direction: column; gap: 15px; margin-top: 20px;">
+        <input type="text" placeholder="Your Name" required
+          style="padding: 10px; border-radius: 5px; border: 1px solid var(--border-color); background: var(--bg-color); color: var(--text-color);">
+        <input type="date" required
+          style="padding: 10px; border-radius: 5px; border: 1px solid var(--border-color); background: var(--bg-color); color: var(--text-color);">
+        <select required
+          style="padding: 10px; border-radius: 5px; border: 1px solid var(--border-color); background: var(--bg-color); color: var(--text-color);">
+          <option value="">Select Table Type</option>
+          <option value="8ball">8-Ball Pool</option>
+          <option value="snooker">Snooker Full-Size</option>
+          <option value="vip">Private VIP Room</option>
+        </select>
+        <button type="button" class="btn" onclick="alert('Booking feature coming soon in backend phase!')">Confirm
+          Booking</button>
+      </form>
+    </div>
+  </div>
+
+  <script src="main.js"></script>
+</body>
+
+</html>

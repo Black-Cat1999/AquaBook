@@ -1,0 +1,230 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>AquaBook | Facilities</title>
+  <link rel="stylesheet" href="style.css">
+  <style>
+    /* Portfolio / Facility Specific Styles */
+    .filter-btn-group {
+      text-align: center;
+      margin-bottom: 30px;
+      display: flex;
+      justify-content: center;
+      gap: 15px;
+      flex-wrap: wrap;
+    }
+
+    .filter-btn {
+      background: transparent;
+      border: 2px solid var(--primary-color);
+      color: var(--text-color);
+      padding: 8px 20px;
+      border-radius: 20px;
+      cursor: pointer;
+      font-weight: 600;
+      transition: all 0.3s ease;
+    }
+
+    .filter-btn.active,
+    .filter-btn:hover {
+      background: var(--primary-color);
+      color: #fff;
+    }
+
+    /* Image Grid (Feature 8) */
+    .gallery-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+      gap: 20px;
+    }
+
+    .gallery-item {
+      position: relative;
+      overflow: hidden;
+      border-radius: 10px;
+      height: 250px;
+      display: block;
+      /* For JS filtering */
+    }
+
+    .gallery-item img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      transition: transform 0.5s ease;
+    }
+
+    .gallery-item:hover img {
+      transform: scale(1.1);
+    }
+
+    .gallery-overlay {
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      background: rgba(26, 11, 46, 0.8);
+      color: #fff;
+      padding: 10px;
+      text-align: center;
+      transform: translateY(100%);
+      transition: transform 0.3s ease;
+    }
+
+    .gallery-item:hover .gallery-overlay {
+      transform: translateY(0);
+    }
+
+    /* Skills Section (Feature 2) */
+    .trainer-section {
+      background-color: var(--card-bg);
+      border-top: 1px solid var(--border-color);
+      border-bottom: 1px solid var(--border-color);
+      margin-top: 60px;
+    }
+
+    .skills-container {
+      max-width: 800px;
+      margin: 0 auto;
+    }
+
+    .skill {
+      margin-bottom: 20px;
+    }
+
+    .skill-name {
+      display: flex;
+      justify-content: space-between;
+      margin-bottom: 5px;
+      font-weight: 600;
+    }
+
+    .skill-bar {
+      height: 10px;
+      background-color: var(--border-color);
+      border-radius: 5px;
+      overflow: hidden;
+    }
+
+    .skill-fill {
+      height: 100%;
+      background-color: var(--primary-color);
+    }
+
+    /* Resume Download / Brochure */
+    .brochure-section {
+      text-align: center;
+      margin-top: 60px;
+      padding: 40px;
+      background: linear-gradient(135deg, var(--bg-color), var(--card-bg));
+      border-radius: 10px;
+    }
+  </style>
+</head>
+
+<body>
+
+  <header>
+    <div class="nav-container">
+      <div class="logo">AquaBook</div>
+      <nav>
+        <ul class="nav-links">
+          <li><a href="index.html">Home</a></li>
+          <li><a href="facilities.html">Facilities</a></li>
+          <li><a href="about.html">About Us</a></li>
+          <li><a href="support.html">Contact/FAQ</a></li>
+          <li><button id="theme-toggle-btn" class="theme-toggle">🌙 Dark Mode</button></li>
+        </ul>
+      </nav>
+    </div>
+  </header>
+
+  <main>
+    <!-- Project Showcase / Gallery with Filtering (Req 2 & 8) -->
+    <section class="section">
+      <h2 class="section-title">Our Tables & Facilities</h2>
+
+      <!-- Filter Buttons -->
+      <div class="filter-btn-group">
+        <button class="filter-btn active" data-filter="all">All Tables</button>
+        <button class="filter-btn" data-filter="8ball">8-Ball Pool</button>
+        <button class="filter-btn" data-filter="snooker">Snooker</button>
+        <button class="filter-btn" data-filter="vip">VIP Rooms</button>
+      </div>
+
+      <!-- Grid -->
+      <div class="gallery-grid" id="gallery">
+        <div class="gallery-item" data-category="8ball">
+          <img src="images/8ball-1.jpg" alt="8-Ball Pool">
+          <div class="gallery-overlay">Professional 8-Ball Table</div>
+        </div>
+        <div class="gallery-item" data-category="snooker">
+          <img src="images/snooker-1.jpg" alt="Snooker">
+          <div class="gallery-overlay">Full-Size Championship Snooker</div>
+        </div>
+        <div class="gallery-item" data-category="vip">
+          <img src="images/vip-1.jpg" alt="VIP Room">
+          <div class="gallery-overlay">VIP Private Room</div>
+        </div>
+        <div class="gallery-item" data-category="8ball">
+          <img src="images/8ball-2.png" alt="8-Ball Casual">
+          <div class="gallery-overlay">Lounge Region 8-Ball</div>
+        </div>
+        <div class="gallery-item" data-category="snooker">
+          <img src="images/snooker-2.jpg" alt="Training Snooker">
+          <div class="gallery-overlay">Quiet Training Snooker Table</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Skills Section (Req 2) -->
+    <section class="section trainer-section">
+      <h2 class="section-title">Coach Expertise & Player Support</h2>
+      <div class="skills-container">
+        <div class="skill">
+          <div class="skill-name"><span>Advanced Break Strategy</span> <span>98%</span></div>
+          <div class="skill-bar">
+            <div class="skill-fill" style="width: 98%;"></div>
+          </div>
+        </div>
+        <div class="skill">
+          <div class="skill-name"><span>Trick Shots & Spin Control</span> <span>92%</span></div>
+          <div class="skill-bar">
+            <div class="skill-fill" style="width: 92%;"></div>
+          </div>
+        </div>
+        <div class="skill">
+          <div class="skill-name"><span>Tournament Refereeing</span> <span>85%</span></div>
+          <div class="skill-bar">
+            <div class="skill-fill" style="width: 85%;"></div>
+          </div>
+        </div>
+        <div class="skill">
+          <div class="skill-name"><span>Cue Maintenance</span> <span>100%</span></div>
+          <div class="skill-bar">
+            <div class="skill-fill" style="width: 100%;"></div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Resume / Brochure Download (Req 2) -->
+    <section class="section brochure-section">
+      <h2>Complete Pricing & House Rules Guide</h2>
+      <p style="margin: 15px 0;">Download our PDF brochure to see detailed table specs, tournament schedules, and
+        membership costs.</p>
+      <a href="pricing-brochure.pdf" class="btn" target="_blank" download>Download PDF Brochure</a>
+    </section>
+  </main>
+
+  <footer>
+    <p>&copy; 2026 AquaBook Booking. Created for Full Stack Mini Project.</p>
+  </footer>
+
+  <script src="main.js"></script>
+</body>
+
+</html>
