@@ -10,8 +10,7 @@
   <style>
     /* Page specific CSS */
     .hero {
-      /* Once you add the image, it will show up here */
-      background: linear-gradient(rgba(26, 11, 46, 0.7), rgba(26, 11, 46, 0.8)), url('images/hero.png') center/cover no-repeat;
+      background: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), url('images/hero.png') center/cover no-repeat;
       min-height: 80vh;
       display: flex;
       flex-direction: column;
@@ -98,7 +97,6 @@
 </head>
 
 <body>
-
   <!-- Navigation -->
   <header>
     <div class="nav-container">
@@ -107,8 +105,11 @@
         <ul class="nav-links">
           <li><a href="index.html">Home</a></li>
           <li><a href="facilities.html">Facilities</a></li>
+          <li><a href="user.html" style="color:var(--primary-color);font-weight:600;">Book Now</a></li>
+          <li><a href="bookings.html">Bookings</a></li>
           <li><a href="about.html">About Us</a></li>
           <li><a href="support.html">Contact/FAQ</a></li>
+          <li><a href="admin.html">⚙ Admin</a></li>
           <li><button id="theme-toggle-btn" class="theme-toggle">🌙 Dark Mode</button></li>
         </ul>
       </nav>
@@ -121,8 +122,10 @@
       <h1>Break with Excellence</h1>
       <p>Reserve world-class premium Snooker and 8-Ball Pool tables by the hour. Whether it's league training or casual
         play, find your perfect table with AquaBook.</p>
-      <a href="#" class="btn open-modal-btn">Book a Table Now</a>
+      <a href="user.html" class="btn">Book a Table Now</a>
     </section>
+
+
 
     <!-- Features Section -->
     <section class="section">
@@ -143,23 +146,67 @@
       </div>
     </section>
 
-    <!-- Testimonials Section -->
-    <section class="section testimonials">
-      <h2 class="section-title">What Players Say</h2>
-      <div class="testi-grid">
-        <div class="testi-card">
-          <p>"The best club in town! The tables are perfectly leveled and the staff is super helpful."</p>
-          <div class="testi-author">- Sarah Jenkins</div>
-        </div>
-        <div class="testi-card">
-          <p>"I love the private VIP rooms. Nothing beats an evening game here with friends."</p>
-          <div class="testi-author">- Mark T.</div>
-        </div>
-        <div class="testi-card">
-          <p>"Booking a table online is seamless. The dark mode theme is a nice touch too!"</p>
-          <div class="testi-author">- Emily R.</div>
+    <!-- Live Reviews Section (from MongoDB) -->
+    <section class="section testimonials" id="reviews-section">
+      <h2 class="section-title">⭐ Player Reviews</h2>
+      <p style="text-align:center; color:#888; margin-top:-25px; margin-bottom:35px; font-size:0.95rem;">
+        Real feedback from our players — straight from the database.
+      </p>
+
+      <!-- Live review cards injected here -->
+      <div class="testi-grid" id="reviews-grid">
+        <div style="text-align:center; color:#888; grid-column:1/-1; padding:30px;">
+          ⏳ Loading reviews...
         </div>
       </div>
+
+      <!-- Divider -->
+      <div style="border-top: 1px solid var(--border-color); margin: 50px 0;"></div>
+
+      <!-- Leave a Review Form -->
+      <h3 style="text-align:center; color:var(--primary-color); margin-bottom:25px; font-size:1.4rem;">
+        🖊️ Leave a Review
+      </h3>
+      <form id="review-form" style="max-width:500px; margin:0 auto; display:flex; flex-direction:column; gap:14px;">
+
+        <div>
+          <label style="font-size:0.85rem; font-weight:600; display:block; margin-bottom:4px;">Your Name *</label>
+          <input id="review-name" type="text" placeholder="e.g. Jatin Sharma" required
+            style="width:100%; padding:10px 14px; border-radius:6px; border:1px solid var(--border-color); background:var(--bg-color); color:var(--text-color); font-size:0.95rem;">
+        </div>
+
+        <div>
+          <label style="font-size:0.85rem; font-weight:600; display:block; margin-bottom:4px;">Table Type *</label>
+          <select id="review-table" required
+            style="width:100%; padding:10px 14px; border-radius:6px; border:1px solid var(--border-color); background:var(--bg-color); color:var(--text-color); font-size:0.95rem;">
+            <option value="">Select table type</option>
+            <option value="8ball">🎱 8-Ball Pool</option>
+            <option value="snooker">🎯 Snooker</option>
+            <option value="vip">👑 VIP Room</option>
+          </select>
+        </div>
+
+        <div>
+          <label style="font-size:0.85rem; font-weight:600; display:block; margin-bottom:8px;">Rating *</label>
+          <div id="star-rating" style="display:flex; gap:8px; font-size:1.8rem; cursor:pointer;">
+            <span class="star" data-value="1">☆</span>
+            <span class="star" data-value="2">☆</span>
+            <span class="star" data-value="3">☆</span>
+            <span class="star" data-value="4">☆</span>
+            <span class="star" data-value="5">☆</span>
+          </div>
+          <input type="hidden" id="review-rating" value="">
+        </div>
+
+        <div>
+          <label style="font-size:0.85rem; font-weight:600; display:block; margin-bottom:4px;">Comment * <span style="color:#888; font-weight:400">(max 300 chars)</span></label>
+          <textarea id="review-comment" rows="3" placeholder="Tell us about your experience..." required maxlength="300"
+            style="width:100%; padding:10px 14px; border-radius:6px; border:1px solid var(--border-color); background:var(--bg-color); color:var(--text-color); font-size:0.95rem; resize:vertical; font-family:inherit;"></textarea>
+        </div>
+
+        <div id="review-status" style="font-size:0.88rem; min-height:18px; text-align:center;"></div>
+        <button type="submit" id="review-submit-btn" class="btn">Submit Review</button>
+      </form>
     </section>
   </main>
 
@@ -168,29 +215,72 @@
     <p>&copy; 2026 AquaBook Booking. Created for Full Stack Mini Project.</p>
   </footer>
 
-  <!-- Booking Modal (Feature 6) -->
+  <!-- Booking Modal -->
   <div class="modal" id="booking-modal">
     <div class="modal-content">
       <span class="close-btn">&times;</span>
-      <h2 style="color: var(--primary-color); margin-bottom: 15px;">Quick Reservation</h2>
-      <p>Please enter your details to reserve a table. A confirmation email will be sent to you shortly.</p>
-      <form style="display: flex; flex-direction: column; gap: 15px; margin-top: 20px;">
-        <input type="text" placeholder="Your Name" required
-          style="padding: 10px; border-radius: 5px; border: 1px solid var(--border-color); background: var(--bg-color); color: var(--text-color);">
-        <input type="date" required
-          style="padding: 10px; border-radius: 5px; border: 1px solid var(--border-color); background: var(--bg-color); color: var(--text-color);">
-        <select required
-          style="padding: 10px; border-radius: 5px; border: 1px solid var(--border-color); background: var(--bg-color); color: var(--text-color);">
-          <option value="">Select Table Type</option>
-          <option value="8ball">8-Ball Pool</option>
-          <option value="snooker">Snooker Full-Size</option>
-          <option value="vip">Private VIP Room</option>
-        </select>
-        <button type="button" class="btn" onclick="alert('Booking feature coming soon in backend phase!')">Confirm
-          Booking</button>
+      <h2 style="color: var(--primary-color); margin-bottom: 5px;">🎱 Reserve a Table</h2>
+      <p style="color: #888; font-size: 0.9rem; margin-bottom: 20px;">Fill in the details below to confirm your slot.</p>
+
+      <form id="booking-form" style="display: flex; flex-direction: column; gap: 12px;">
+
+        <!-- Name -->
+        <div>
+          <label style="font-size:0.85rem; font-weight:600; margin-bottom:4px; display:block;">Full Name *</label>
+          <input id="booking-name" type="text" placeholder="e.g. Jatin Sharma" required
+            style="width:100%; padding: 10px 14px; border-radius: 6px; border: 1px solid var(--border-color); background: var(--bg-color); color: var(--text-color); font-size:0.95rem;">
+        </div>
+
+        <!-- Phone (optional) -->
+        <div>
+          <label style="font-size:0.85rem; font-weight:600; margin-bottom:4px; display:block;">Phone <span style="color:#888;font-weight:400">(optional)</span></label>
+          <input id="booking-phone" type="tel" placeholder="e.g. 9876543210"
+            style="width:100%; padding: 10px 14px; border-radius: 6px; border: 1px solid var(--border-color); background: var(--bg-color); color: var(--text-color); font-size:0.95rem;">
+        </div>
+
+        <!-- Date -->
+        <div>
+          <label style="font-size:0.85rem; font-weight:600; margin-bottom:4px; display:block;">Date *</label>
+          <input id="booking-date" type="date" required
+            style="width:100%; padding: 10px 14px; border-radius: 6px; border: 1px solid var(--border-color); background: var(--bg-color); color: var(--text-color); font-size:0.95rem;">
+        </div>
+
+        <!-- Time Slot -->
+        <div>
+          <label style="font-size:0.85rem; font-weight:600; margin-bottom:4px; display:block;">Time Slot *</label>
+          <select id="booking-slot" required
+            style="width:100%; padding: 10px 14px; border-radius: 6px; border: 1px solid var(--border-color); background: var(--bg-color); color: var(--text-color); font-size:0.95rem;">
+            <option value="">Select a time slot</option>
+            <option value="10:00 AM">10:00 AM</option>
+            <option value="12:00 PM">12:00 PM</option>
+            <option value="02:00 PM">02:00 PM</option>
+            <option value="04:00 PM">04:00 PM</option>
+            <option value="06:00 PM">06:00 PM</option>
+            <option value="08:00 PM">08:00 PM</option>
+        <!-- Table Type -->
+        <div>
+          <label style="font-size:0.85rem; font-weight:600; margin-bottom:4px; display:block;">Table Type *</label>
+          <select id="booking-table" required
+            style="width:100%; padding: 10px 14px; border-radius: 6px; border: 1px solid var(--border-color); background: var(--bg-color); color: var(--text-color); font-size:0.95rem;">
+            <option value="">Select table type</option>
+            <option value="8ball">🎱 8-Ball Pool</option>
+            <option value="snooker">🎯 Snooker Full-Size</option>
+            <option value="vip">👑 Private VIP Room</option>
+          </select>
+        </div>
+
+        <!-- Status message -->
+        <div id="booking-status" style="font-size: 0.88rem; min-height: 18px; text-align:center;"></div>
+
+        <!-- Submit button -->
+        <button type="submit" id="booking-submit-btn" class="btn" style="margin-top:4px;">Confirm Booking</button>
+
+        <!-- Link to view bookings -->
+        <p style="text-align:center; font-size:0.82rem; color:#888; margin-top:4px;">
+          View all reservations → <a href="bookings.html" style="color: var(--primary-color);">Bookings Page</a>
+        </p>
       </form>
     </div>
-  </div>
 
   <script src="main.js"></script>
 </body>

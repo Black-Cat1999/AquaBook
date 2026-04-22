@@ -1,0 +1,500 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>AquaBook | Book a Table</title>
+  <meta name="description" content="Book a pool or snooker table at AquaBook. Choose your date, table type and available time slot.">
+  <link rel="stylesheet" href="style.css">
+  <style>
+    .page-hero {
+      background: linear-gradient(135deg, #1a0b2e 0%, #3c096c 100%);
+      padding: 60px 20px 40px;
+      text-align: center;
+      border-bottom: 1px solid var(--border-color);
+    }
+    .page-hero h1 { font-size: 2.6rem; color: var(--primary-color); margin-bottom: 8px; }
+    .page-hero p  { color: #aaa; font-size: 1rem; }
+
+    /* ── Booking layout ── */
+    .booking-wrapper {
+      max-width: 820px;
+      margin: 50px auto 80px;
+      padding: 0 20px;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 30px;
+    }
+    @media (max-width: 680px) {
+      .booking-wrapper { grid-template-columns: 1fr; }
+    }
+
+    .booking-card {
+      background: var(--card-bg);
+      border: 1px solid var(--border-color);
+      border-radius: 14px;
+      padding: 30px;
+    }
+    .booking-card h2 {
+      color: var(--primary-color);
+      font-size: 1.3rem;
+      margin-bottom: 22px;
+    }
+
+    /* ── Form inputs ── */
+    .field { margin-bottom: 18px; }
+    .field label {
+      display: block;
+      font-size: 0.85rem;
+      font-weight: 600;
+      margin-bottom: 6px;
+      color: var(--text-color);
+    }
+    .field input, .field select {
+      width: 100%;
+      padding: 10px 14px;
+      border-radius: 8px;
+      border: 1px solid var(--border-color);
+      background: var(--bg-color);
+      color: var(--text-color);
+      font-size: 0.95rem;
+      font-family: inherit;
+      transition: border-color 0.2s;
+    }
+    .field input:focus, .field select:focus {
+      outline: none;
+      border-color: var(--primary-color);
+    }
+
+    /* ── Slot grid ── */
+    .slot-section { grid-column: 1 / -1; }
+    .slot-section h2 {
+      color: var(--primary-color);
+      font-size: 1.3rem;
+      margin-bottom: 8px;
+    }
+    .slot-hint {
+      font-size: 0.82rem;
+      color: #888;
+      margin-bottom: 18px;
+    }
+
+    .slot-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 12px;
+      margin-bottom: 20px;
+    }
+    @media (max-width: 480px) {
+      .slot-grid { grid-template-columns: repeat(2, 1fr); }
+    }
+
+    .slot-btn {
+      padding: 14px 10px;
+      border-radius: 10px;
+      border: 2px solid transparent;
+      font-size: 0.9rem;
+      font-weight: 600;
+      font-family: inherit;
+      cursor: pointer;
+      text-align: center;
+      transition: all 0.2s ease;
+      position: relative;
+    }
+    /* Available */
+    .slot-btn.available {
+      background: rgba(0, 200, 120, 0.1);
+      border-color: #00c878;
+      color: #00c878;
+    }
+    .slot-btn.available:hover {
+      background: rgba(0, 200, 120, 0.25);
+      transform: translateY(-2px);
+    }
+    /* Booked */
+    .slot-btn.booked {
+      background: rgba(220, 50, 50, 0.08);
+      border-color: rgba(220, 50, 50, 0.3);
+      color: #888;
+      cursor: not-allowed;
+      opacity: 0.7;
+    }
+    .slot-btn.booked::after {
+      content: 'Booked';
+      display: block;
+      font-size: 0.68rem;
+      font-weight: 400;
+      color: #e74c3c;
+      margin-top: 3px;
+      letter-spacing: 0.5px;
+    }
+    /* Selected */
+    .slot-btn.selected {
+      background: var(--primary-color);
+      border-color: var(--primary-color);
+      color: #fff;
+      transform: translateY(-2px);
+      box-shadow: 0 4px 14px rgba(157, 78, 221, 0.4);
+    }
+    /* Loading skeleton */
+    .slot-btn.loading {
+      background: var(--card-bg);
+      border-color: var(--border-color);
+      color: transparent;
+      animation: pulse 1.2s ease infinite;
+    }
+    @keyframes pulse {
+      0%, 100% { opacity: 1; }
+      50%       { opacity: 0.4; }
+    }
+
+    .slot-prompt {
+      text-align: center;
+      color: #666;
+      padding: 30px 20px;
+      border: 2px dashed var(--border-color);
+      border-radius: 10px;
+      font-size: 0.9rem;
+    }
+
+    /* ── Submit area ── */
+    .submit-section {
+      grid-column: 1 / -1;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 12px;
+    }
+    .submit-section .btn {
+      width: 100%;
+      max-width: 380px;
+      padding: 14px;
+      font-size: 1rem;
+    }
+    #form-status {
+      font-size: 0.9rem;
+      min-height: 20px;
+      text-align: center;
+    }
+
+    /* ── Confirmation card ── */
+    .confirm-card {
+      display: none;
+      grid-column: 1 / -1;
+      background: rgba(0, 200, 120, 0.08);
+      border: 2px solid #00c878;
+      border-radius: 14px;
+      padding: 30px;
+      text-align: center;
+    }
+    .confirm-card.show { display: block; }
+    .confirm-card h3 { color: #00c878; font-size: 1.5rem; margin-bottom: 16px; }
+    .confirm-card p  { color: var(--text-color); margin-bottom: 8px; font-size: 0.95rem; }
+    .confirm-card .detail-row {
+      display: flex;
+      justify-content: space-between;
+      max-width: 340px;
+      margin: 0 auto 8px;
+      padding: 8px 14px;
+      background: var(--bg-color);
+      border-radius: 8px;
+      font-size: 0.9rem;
+    }
+    .confirm-card .detail-label { color: #888; }
+    .confirm-card .detail-val   { font-weight: 600; color: var(--primary-color); }
+    .book-again-btn {
+      margin-top: 20px;
+      padding: 10px 28px;
+      background: transparent;
+      border: 1px solid var(--primary-color);
+      color: var(--primary-color);
+      border-radius: 8px;
+      cursor: pointer;
+      font-family: inherit;
+      font-size: 0.9rem;
+      transition: all 0.2s;
+    }
+    .book-again-btn:hover { background: var(--primary-color); color: #fff; }
+
+    footer {
+      background: var(--nav-bg);
+      text-align: center;
+      padding: 30px 20px;
+      border-top: 1px solid var(--border-color);
+    }
+  </style>
+</head>
+<body>
+
+  <header>
+    <div class="nav-container">
+      <div class="logo">AquaBook</div>
+      <nav>
+        <ul class="nav-links">
+          <li><a href="index.html">Home</a></li>
+          <li><a href="facilities.html">Facilities</a></li>
+          <li><a href="user.html" style="color:var(--primary-color);font-weight:600;">Book Now</a></li>
+          <li><a href="bookings.html">Bookings</a></li>
+          <li><a href="about.html">About Us</a></li>
+          <li><a href="admin.html">⚙ Admin</a></li>
+          <li><button id="theme-toggle-btn" class="theme-toggle">☀️ Light Mode</button></li>
+        </ul>
+      </nav>
+    </div>
+  </header>
+
+  <div class="page-hero">
+    <h1>🎱 Book a Table</h1>
+    <p>Pick your table, choose an available slot, and you're good to go.</p>
+  </div>
+
+  <main>
+    <div class="booking-wrapper" id="booking-wrapper">
+
+      <!-- ── LEFT: Personal Details ── -->
+      <div class="booking-card">
+        <h2>📋 Your Details</h2>
+
+        <div class="field">
+          <label for="b-name">Full Name *</label>
+          <input id="b-name" type="text" placeholder="e.g. Jatin Sharma" oninput="window.checkAllFieldsValid()" required>
+          <span id="err-name" style="font-size:0.8rem; display:block; margin-top:4px;"></span>
+        </div>
+
+        <div class="field">
+          <label for="b-phone">Phone <span style="color:#888;font-weight:400">(optional)</span></label>
+          <input id="b-phone" type="tel" placeholder="e.g. 9876543210" oninput="window.checkAllFieldsValid()">
+          <span id="err-phone" style="font-size:0.8rem; display:block; margin-top:4px;"></span>
+        </div>
+
+        <div class="field">
+          <label for="b-date">Date *</label>
+          <input id="b-date" type="date" onchange="tryLoadSlots(); window.checkAllFieldsValid()" required>
+          <span id="err-date" style="font-size:0.8rem; display:block; margin-top:4px;"></span>
+        </div>
+      </div>
+
+      <!-- ── RIGHT: Table Selection ── -->
+      <div class="booking-card">
+        <h2>🎯 Table Selection</h2>
+
+        <div class="field">
+          <label for="b-table">Table Type *</label>
+          <select id="b-table" onchange="tryLoadSlots(); window.checkAllFieldsValid()">
+            <option value="" disabled selected>-- Select Table --</option>
+            <option value="8ball">8-Ball Pool (₹200/hr)</option>
+            <option value="snooker">Snooker (₹300/hr)</option>
+            <option value="vip">VIP Room (₹500/hr)</option>
+          </select>
+          <span id="err-table" style="font-size:0.8rem; display:block; margin-top:4px;"></span>
+        </div>
+
+        <div style="margin-top:16px; padding:14px; background:var(--bg-color); border-radius:8px; border:1px solid var(--border-color);">
+          <p style="font-size:0.82rem; color:#888; margin-bottom:8px;">Selected Slot:</p>
+          <p id="selected-slot-display" style="font-size:1rem; font-weight:600; color:var(--primary-color);">None selected</p>
+        </div>
+      </div>
+
+      <!-- ── FULL WIDTH: Slot Availability Grid ── -->
+      <div class="booking-card slot-section">
+        <h2>⏰ Time Slot Availability</h2>
+        <p class="slot-hint">Select a date and table type above — available slots will appear here.</p>
+
+        <div id="slot-container">
+          <div class="slot-prompt">
+            📅 Please select a date and table type to see available slots.
+          </div>
+        </div>
+
+        <input type="hidden" id="b-slot" value="">
+      </div>
+
+      <!-- ── FULL WIDTH: Submit + Status ── -->
+      <div class="submit-section">
+        <div id="form-status"></div>
+        <button class="btn" id="submit-btn" onclick="submitBooking()" disabled style="opacity:0.6;">✅ Confirm Booking</button>
+        <p style="font-size:0.8rem; color:#666;">
+          View your bookings on the <a href="bookings.html" style="color:var(--primary-color);">Bookings Page →</a>
+        </p>
+      </div>
+
+      <!-- ── FULL WIDTH: Confirmation Card (shown after success) ── -->
+      <div class="confirm-card" id="confirm-card">
+        <h3>🎉 Booking Confirmed!</h3>
+        <p style="color:#888; margin-bottom:20px;">Your reservation details:</p>
+        <div class="detail-row">
+          <span class="detail-label">Name</span>
+          <span class="detail-val" id="conf-name"></span>
+        </div>
+        <div class="detail-row">
+          <span class="detail-label">Table</span>
+          <span class="detail-val" id="conf-table"></span>
+        </div>
+        <div class="detail-row">
+          <span class="detail-label">Date</span>
+          <span class="detail-val" id="conf-date"></span>
+        </div>
+        <div class="detail-row">
+          <span class="detail-label">Time</span>
+          <span class="detail-val" id="conf-slot"></span>
+        </div>
+        <button class="book-again-btn" onclick="resetForm()">Book Another Table</button>
+      </div>
+
+    </div>
+  </main>
+
+  <footer>
+    <p>&copy; 2026 AquaBook Booking. Created for Full Stack Mini Project.</p>
+  </footer>
+
+  <script src="main.js"></script>
+  <script>
+    const API = 'http://localhost:5000';
+    let allSlots = ['10:00 AM', '12:00 PM', '02:00 PM', '04:00 PM', '06:00 PM', '08:00 PM'];
+    let selectedSlot = '';
+
+    // BUG 6 Fix: Set min date
+    const today = new Date().toISOString().split('T')[0];
+    document.getElementById('b-date').setAttribute('min', today);
+
+    // BUG 1 Fix: Reset form properly
+    window.addEventListener('pageshow', (e) => {
+      if (!sessionStorage.getItem('pendingBooking')) {
+        resetForm();
+      }
+    });
+
+    // ── Theme ──
+    const themeBtn = document.getElementById('theme-toggle-btn');
+    const savedTheme = localStorage.getItem('theme') || 'dark';
+    document.documentElement.setAttribute('data-theme', savedTheme);
+    themeBtn.innerText = savedTheme === 'dark' ? '☀️ Light Mode' : '🌙 Dark Mode';
+    themeBtn.addEventListener('click', () => {
+      const t = document.documentElement.getAttribute('data-theme') === 'dark' ? 'light' : 'dark';
+      document.documentElement.setAttribute('data-theme', t);
+      localStorage.setItem('theme', t);
+      themeBtn.innerText = t === 'dark' ? '☀️ Light Mode' : '🌙 Dark Mode';
+    });
+
+    // ── Load available slots ──
+    function tryLoadSlots() {
+      const date = document.getElementById('b-date').value;
+      const table = document.getElementById('b-table').value;
+      if (date && table) {
+        loadSlots(date, table);
+      } else {
+        // BUG 2 Fix: Clear grid
+        document.getElementById('slot-container').innerHTML = '<div class="slot-prompt">📅 Please select a date and table type to see available slots.</div>';
+        selectedSlot = '';
+        document.getElementById('b-slot').value = '';
+        document.getElementById('selected-slot-display').textContent = 'None selected';
+        if (window.checkAllFieldsValid) window.checkAllFieldsValid();
+      }
+    }
+
+    // ── Fetch availability and render slot grid ──
+    async function loadSlots(date, tableType) {
+      const container = document.getElementById('slot-container');
+
+      // Show loading skeletons
+      container.innerHTML = allSlots.map(s => `
+        <button class="slot-btn loading" disabled>${s}</button>
+      `).join('');
+      container.className = 'slot-grid';
+
+      // Reset any previously selected slot
+      selectedSlot = '';
+      document.getElementById('b-slot').value = '';
+      document.getElementById('selected-slot-display').textContent = 'None selected';
+
+      try {
+        const res  = await fetch(`${API}/api/bookings/availability?date=${date}&tableType=${tableType}`);
+        const data = await res.json();
+        const booked = data.bookedSlots || [];
+
+        container.innerHTML = allSlots.map(slot => {
+          const isTaken = booked.includes(slot);
+          const id = `slot-${slot.replace(/\s+/g, '')}`;
+          return `
+            <button
+              id="${id}"
+              class="slot-btn ${isTaken ? 'booked' : 'available'}"
+              ${isTaken ? 'disabled' : `onclick="selectSlot('${slot}')"`}
+            >${slot}</button>
+          `;
+        }).join('');
+      } catch (err) {
+        container.className = '';
+        container.innerHTML = '<div class="slot-prompt" style="color:#e74c3c;">🚫 Could not load slots. Is the backend running?</div>';
+      }
+    }
+
+    // ── Select a slot ──
+    function selectSlot(slot) {
+      document.querySelectorAll('.slot-btn').forEach(b => b.classList.remove('selected'));
+      const btn = document.getElementById(`slot-${slot.replace(/\s+/g, '')}`);
+      if (btn) btn.classList.add('selected');
+
+      selectedSlot = slot;
+      document.getElementById('b-slot').value = slot;
+      document.getElementById('selected-slot-display').textContent = slot;
+      
+      if (window.checkAllFieldsValid) window.checkAllFieldsValid();
+    }
+
+    // ── Submit booking (Redirect to Payment) ──
+    async function submitBooking() {
+      // Trigger validation visually
+      if (window.checkAllFieldsValid) window.checkAllFieldsValid();
+      
+      const btn = document.getElementById('submit-btn');
+      if (btn.disabled) return;
+
+      const name      = document.getElementById('b-name').value.trim();
+      const phone     = document.getElementById('b-phone').value.trim();
+      const date      = document.getElementById('b-date').value;
+      const tableType = document.getElementById('b-table').value;
+      const timeSlot  = selectedSlot;
+
+      // Save to sessionStorage
+      const bookingData = { name, phone, date, timeSlot, tableType };
+      sessionStorage.setItem('pendingBooking', JSON.stringify(bookingData));
+
+      // Redirect to payment
+      btn.disabled = true;
+      btn.textContent = 'Redirecting to Payment...';
+      window.location.href = 'payment.html';
+    }
+
+    // ── Show confirmation ──
+    const TABLE_LABELS = { '8ball': '🎱 8-Ball Pool', snooker: '🎯 Snooker', vip: '👑 VIP Room' };
+    function showConfirmation({ name, date, timeSlot, tableType }) {
+      document.getElementById('conf-name').textContent  = name;
+      document.getElementById('conf-table').textContent = TABLE_LABELS[tableType] || tableType;
+      document.getElementById('conf-date').textContent  = date;
+      document.getElementById('conf-slot').textContent  = timeSlot;
+
+      document.getElementById('confirm-card').classList.add('show');
+      document.getElementById('submit-btn').style.display = 'none';
+      document.getElementById('confirm-card').scrollIntoView({ behavior: 'smooth', block: 'center' });
+    }
+
+    // ── Reset form for another booking ──
+    function resetForm() {
+      document.getElementById('b-name').value   = '';
+      document.getElementById('b-phone').value  = '';
+      document.getElementById('b-date').value   = '';
+      document.getElementById('b-table').value  = '';
+      document.getElementById('slot-container').innerHTML = '<div class="slot-prompt">📅 Please select a date and table type to see available slots.</div>';
+      document.getElementById('slot-container').className = '';
+      selectedSlot = '';
+      document.getElementById('b-slot').value = '';
+      document.getElementById('selected-slot-display').textContent = 'None selected';
+      document.getElementById('form-status').textContent = '';
+      document.getElementById('confirm-card').classList.remove('show');
+      document.getElementById('submit-btn').style.display = '';
+    }
+  </script>
+</body>
+</html>

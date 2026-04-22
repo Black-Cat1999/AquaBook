@@ -1,0 +1,271 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>AquaBook | Payment</title>
+  <link rel="stylesheet" href="style.css">
+  <style>
+    .page-hero {
+      background: linear-gradient(135deg, #1a0b2e 0%, #3c096c 100%);
+      padding: 60px 20px 40px;
+      text-align: center;
+      border-bottom: 1px solid var(--border-color);
+    }
+    .page-hero h1 { font-size: 2.6rem; color: var(--primary-color); margin-bottom: 8px; }
+    .page-hero p  { color: #aaa; font-size: 1rem; }
+
+    .payment-container {
+      max-width: 600px;
+      margin: 50px auto 80px;
+      padding: 0 20px;
+    }
+
+    .payment-card {
+      background: var(--card-bg);
+      border: 1px solid var(--border-color);
+      border-radius: 14px;
+      padding: 30px;
+    }
+
+    .payment-card h2 {
+      color: var(--primary-color);
+      font-size: 1.5rem;
+      margin-bottom: 20px;
+      text-align: center;
+    }
+
+    .summary-row {
+      display: flex;
+      justify-content: space-between;
+      padding: 12px 0;
+      border-bottom: 1px solid var(--border-color);
+      font-size: 0.95rem;
+    }
+    .summary-row:last-of-type { border-bottom: none; }
+    .summary-label { color: #888; }
+    .summary-val { font-weight: 600; color: var(--text-color); }
+
+    .total-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-top: 20px;
+      padding: 20px;
+      background: rgba(157, 78, 221, 0.1);
+      border: 2px solid var(--primary-color);
+      border-radius: 10px;
+    }
+    .total-label { font-size: 1.2rem; font-weight: 700; color: var(--text-color); }
+    .total-amount { font-size: 1.6rem; font-weight: 700; color: var(--primary-color); }
+
+    .btn-pay {
+      width: 100%;
+      margin-top: 30px;
+      padding: 16px;
+      font-size: 1.1rem;
+      background: #00c878;
+      border-radius: 8px;
+    }
+    .btn-pay:hover { background: #00b36b; }
+    .btn-pay:disabled { opacity: 0.6; cursor: not-allowed; }
+
+    #payment-status {
+      text-align: center;
+      margin-top: 15px;
+      font-size: 0.95rem;
+      min-height: 24px;
+    }
+
+    /* ── Confirmation card ── */
+    .confirm-card {
+      display: none;
+      background: rgba(0, 200, 120, 0.08);
+      border: 2px solid #00c878;
+      border-radius: 14px;
+      padding: 40px 30px;
+      text-align: center;
+      margin-top: 20px;
+    }
+    .confirm-card.show { display: block; }
+    .confirm-card h3 { color: #00c878; font-size: 1.8rem; margin-bottom: 16px; }
+    .confirm-card p  { color: var(--text-color); margin-bottom: 24px; font-size: 1rem; }
+    .home-btn {
+      display: inline-block;
+      padding: 12px 30px;
+      background: var(--primary-color);
+      color: #fff;
+      border-radius: 8px;
+      font-weight: 600;
+      transition: all 0.2s;
+    }
+    .home-btn:hover { background: var(--secondary-color); transform: translateY(-2px); }
+
+    footer {
+      background: var(--nav-bg);
+      text-align: center;
+      padding: 30px 20px;
+      border-top: 1px solid var(--border-color);
+    }
+  </style>
+</head>
+<body>
+
+  <header>
+    <div class="nav-container">
+      <div class="logo">AquaBook</div>
+      <nav>
+        <ul class="nav-links">
+          <li><a href="index.html">Home</a></li>
+          <li><a href="facilities.html">Facilities</a></li>
+          <li><a href="user.html">Book Now</a></li>
+          <li><a href="bookings.html">Bookings</a></li>
+          <li><a href="about.html">About Us</a></li>
+          <li><a href="support.html">Contact/FAQ</a></li>
+          <li><button id="theme-toggle-btn" class="theme-toggle">☀️ Light Mode</button></li>
+        </ul>
+      </nav>
+    </div>
+  </header>
+
+  <div class="page-hero">
+    <h1>💳 Secure Payment</h1>
+    <p>Review your booking details and complete the payment.</p>
+  </div>
+
+  <main>
+    <div class="payment-container">
+      
+      <div class="payment-card" id="payment-card">
+        <h2>Booking Summary</h2>
+
+        <div class="summary-row">
+          <span class="summary-label">Name</span>
+          <span class="summary-val" id="sum-name"></span>
+        </div>
+        <div class="summary-row">
+          <span class="summary-label">Table Type</span>
+          <span class="summary-val" id="sum-table"></span>
+        </div>
+        <div class="summary-row">
+          <span class="summary-label">Date</span>
+          <span class="summary-val" id="sum-date"></span>
+        </div>
+        <div class="summary-row">
+          <span class="summary-label">Time Slot</span>
+          <span class="summary-val" id="sum-slot"></span>
+        </div>
+
+        <div class="total-row">
+          <span class="total-label">Total Amount</span>
+          <span class="total-amount" id="sum-total">₹0</span>
+        </div>
+
+        <button class="btn btn-pay" id="pay-btn" onclick="processPayment()">💰 Pay Now</button>
+        <div id="payment-status"></div>
+        <div style="text-align:center; margin-top:20px;">
+          <a href="#" onclick="cancelPayment()" style="color:#888; font-size:0.85rem; text-decoration:underline;">← Cancel & Go Back</a>
+        </div>
+      </div>
+
+      <div class="confirm-card" id="confirm-card">
+        <div style="font-size:3rem; margin-bottom:10px;">✅</div>
+        <h3>Payment Successful!</h3>
+        <p>Your booking has been confirmed and saved successfully.</p>
+        <a href="bookings.html" class="home-btn">View My Bookings</a>
+      </div>
+
+    </div>
+  </main>
+
+  <footer>
+    <p>&copy; 2026 AquaBook Booking. Created for Full Stack Mini Project.</p>
+  </footer>
+
+  <script>
+    const API = 'http://localhost:5000';
+    let bookingData = null;
+
+    // ── Theme ──
+    const themeBtn = document.getElementById('theme-toggle-btn');
+    const savedTheme = localStorage.getItem('theme') || 'dark';
+    document.documentElement.setAttribute('data-theme', savedTheme);
+    themeBtn.innerText = savedTheme === 'dark' ? '☀️ Light Mode' : '🌙 Dark Mode';
+    themeBtn.addEventListener('click', () => {
+      const t = document.documentElement.getAttribute('data-theme') === 'dark' ? 'light' : 'dark';
+      document.documentElement.setAttribute('data-theme', t);
+      localStorage.setItem('theme', t);
+      themeBtn.innerText = t === 'dark' ? '☀️ Light Mode' : '🌙 Dark Mode';
+    });
+
+    // ── Load Booking Data ──
+    function loadBooking() {
+      const dataStr = sessionStorage.getItem('pendingBooking');
+      if (!dataStr) {
+        window.location.href = 'user.html';
+        return;
+      }
+      bookingData = JSON.parse(dataStr);
+
+      const TABLE_LABELS = { '8ball': '🎱 8-Ball Pool', snooker: '🎯 Snooker', vip: '👑 VIP Room' };
+      const TABLE_PRICES = { '8ball': 200, snooker: 300, vip: 500 };
+
+      document.getElementById('sum-name').textContent = bookingData.name;
+      document.getElementById('sum-table').textContent = TABLE_LABELS[bookingData.tableType] || bookingData.tableType;
+      document.getElementById('sum-date').textContent = bookingData.date;
+      document.getElementById('sum-slot').textContent = bookingData.timeSlot;
+
+      const price = TABLE_PRICES[bookingData.tableType] || 0;
+      document.getElementById('sum-total').textContent = `₹${price}`;
+    }
+    loadBooking();
+
+    // ── Process Mock Payment & Submit Booking ──
+    async function processPayment() {
+      const btn = document.getElementById('pay-btn');
+      const status = document.getElementById('payment-status');
+
+      btn.disabled = true;
+      btn.textContent = 'Processing Payment...';
+      status.style.color = '#888';
+      status.textContent = 'Securely processing your transaction...';
+
+      // Mock network delay for payment gateway
+      await new Promise(resolve => setTimeout(resolve, 1500));
+
+      try {
+        const res = await fetch(`${API}/api/bookings`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(bookingData)
+        });
+        const data = await res.json();
+
+        if (res.ok) {
+          // Success
+          sessionStorage.removeItem('pendingBooking');
+          document.getElementById('payment-card').style.display = 'none';
+          document.getElementById('confirm-card').classList.add('show');
+        } else {
+          // Failure (e.g., slot taken during payment)
+          btn.disabled = false;
+          btn.textContent = '💰 Pay Now';
+          status.style.color = '#e74c3c';
+          status.textContent = `⚠️ Payment Failed: ${data.error}`;
+        }
+      } catch (err) {
+        btn.disabled = false;
+        btn.textContent = '💰 Pay Now';
+        status.style.color = '#e74c3c';
+        status.textContent = '🚫 Server Error. Could not process booking.';
+      }
+    }
+
+    // ── Cancel Payment ──
+    function cancelPayment() {
+      sessionStorage.removeItem('pendingBooking');
+      window.location.href = 'user.html';
+    }
+  </script>
+</body>
+</html>

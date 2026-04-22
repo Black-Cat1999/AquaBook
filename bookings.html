@@ -1,0 +1,536 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>AquaBook | All Bookings</title>
+  <meta name="description" content="View and manage all pool table bookings at AquaBook.">
+  <link rel="stylesheet" href="style.css">
+  <style>
+    /* ── Page header ── */
+    .page-hero {
+      background: linear-gradient(135deg, #1a0b2e 0%, #3c096c 100%);
+      padding: 60px 20px 40px;
+      text-align: center;
+      border-bottom: 1px solid var(--border-color);
+    }
+    .page-hero h1 {
+      font-size: 2.8rem;
+      color: var(--primary-color);
+      margin-bottom: 8px;
+    }
+    .page-hero p {
+      color: #aaa;
+      font-size: 1rem;
+    }
+
+    /* ── Stats cards ── */
+    .stats-section {
+      max-width: 1100px;
+      margin: 40px auto 0;
+      padding: 0 20px;
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 20px;
+    }
+    .stat-card {
+      background: var(--card-bg);
+      border: 1px solid var(--border-color);
+      border-radius: 12px;
+      padding: 24px 20px;
+      text-align: center;
+      transition: transform 0.2s ease;
+    }
+    .stat-card:hover { transform: translateY(-4px); }
+    .stat-card .stat-icon { font-size: 2rem; margin-bottom: 8px; }
+    .stat-card .stat-number {
+      font-size: 2.2rem;
+      font-weight: 700;
+      color: var(--primary-color);
+    }
+    .stat-card .stat-label {
+      font-size: 0.85rem;
+      color: #888;
+      margin-top: 4px;
+    }
+
+    /* ── Table section ── */
+    .table-section {
+      max-width: 1100px;
+      margin: 40px auto 60px;
+      padding: 0 20px;
+    }
+    .table-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 20px;
+      flex-wrap: wrap;
+      gap: 12px;
+    }
+    .table-header h2 {
+      font-size: 1.5rem;
+      color: var(--primary-color);
+    }
+    .refresh-btn {
+      padding: 8px 18px;
+      background: transparent;
+      border: 1px solid var(--primary-color);
+      color: var(--primary-color);
+      border-radius: 6px;
+      cursor: pointer;
+      font-size: 0.9rem;
+      transition: all 0.2s ease;
+    }
+    .refresh-btn:hover {
+      background: var(--primary-color);
+      color: #fff;
+    }
+
+    /* ── Filter bar ── */
+    .filter-bar {
+      display: flex;
+      gap: 10px;
+      margin-bottom: 20px;
+      flex-wrap: wrap;
+    }
+    .filter-bar button {
+      padding: 6px 16px;
+      border-radius: 20px;
+      border: 1px solid var(--border-color);
+      background: transparent;
+      color: var(--text-color);
+      cursor: pointer;
+      font-size: 0.85rem;
+      transition: all 0.2s;
+    }
+    .filter-bar button.active,
+    .filter-bar button:hover {
+      background: var(--primary-color);
+      border-color: var(--primary-color);
+      color: #fff;
+    }
+
+    /* ── Responsive Table ── */
+    .table-wrapper {
+      overflow-x: auto;
+      border-radius: 12px;
+      border: 1px solid var(--border-color);
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 0.95rem;
+    }
+    thead {
+      background: var(--card-bg);
+    }
+    thead th {
+      padding: 14px 18px;
+      text-align: left;
+      font-weight: 600;
+      color: var(--primary-color);
+      border-bottom: 1px solid var(--border-color);
+      white-space: nowrap;
+    }
+    tbody tr {
+      background: var(--bg-color);
+      border-bottom: 1px solid var(--border-color);
+      transition: background 0.15s ease;
+    }
+    tbody tr:last-child { border-bottom: none; }
+    tbody tr:hover { background: var(--card-bg); }
+    tbody td {
+      padding: 14px 18px;
+      vertical-align: middle;
+    }
+
+    /* ── Badge chips ── */
+    .badge {
+      display: inline-block;
+      padding: 3px 12px;
+      border-radius: 20px;
+      font-size: 0.78rem;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+    .badge-8ball  { background: rgba(157, 78, 221, 0.2); color: #c77dff; }
+    .badge-snooker { background: rgba(0, 180, 120, 0.15); color: #00c896; }
+    .badge-vip    { background: rgba(255, 193, 7, 0.15); color: #ffc107; }
+
+    /* ── Time slot ── */
+    .time-chip {
+      background: var(--card-bg);
+      border: 1px solid var(--border-color);
+      border-radius: 6px;
+      padding: 2px 10px;
+      font-size: 0.82rem;
+      color: #ccc;
+    }
+
+    /* ── Cancel button ── */
+    .cancel-btn {
+      padding: 6px 14px;
+      background: transparent;
+      border: 1px solid #e74c3c;
+      color: #e74c3c;
+      border-radius: 6px;
+      cursor: pointer;
+      font-size: 0.82rem;
+      transition: all 0.2s ease;
+    }
+    .cancel-btn:hover {
+      background: #e74c3c;
+      color: #fff;
+    }
+    .cancel-btn:disabled {
+      opacity: 0.4;
+      cursor: not-allowed;
+    }
+
+    /* ── Empty / loading states ── */
+    .state-msg {
+      text-align: center;
+      padding: 60px 20px;
+      color: #888;
+    }
+    .state-msg .state-icon { font-size: 3rem; margin-bottom: 12px; }
+    .state-msg p { font-size: 1rem; }
+
+    /* ── Toast notification ── */
+    .toast {
+      position: fixed;
+      bottom: 30px;
+      right: 30px;
+      background: #333;
+      color: #fff;
+      padding: 14px 22px;
+      border-radius: 8px;
+      font-size: 0.9rem;
+      box-shadow: 0 4px 20px rgba(0,0,0,0.4);
+      transform: translateY(80px);
+      opacity: 0;
+      transition: all 0.3s ease;
+      z-index: 9999;
+    }
+    .toast.show {
+      transform: translateY(0);
+      opacity: 1;
+    }
+    .toast.success { background: #1a7a4a; }
+    .toast.error   { background: #7a1a1a; }
+
+    footer {
+      background-color: var(--nav-bg);
+      text-align: center;
+      padding: 30px 20px;
+      border-top: 1px solid var(--border-color);
+    }
+  </style>
+</head>
+
+<body>
+
+  <header>
+    <div class="nav-container">
+      <div class="logo">AquaBook</div>
+      <nav>
+        <ul class="nav-links">
+          <li><a href="index.html">Home</a></li>
+          <li><a href="facilities.html">Facilities</a></li>
+          <li><a href="bookings.html" style="color: var(--primary-color); font-weight: 600;">Bookings</a></li>
+          <li><a href="about.html">About Us</a></li>
+          <li><a href="admin.html">⚙ Admin</a></li>
+          <li><button id="theme-toggle-btn" class="theme-toggle">☀️ Light Mode</button></li>
+        </ul>
+      </nav>
+    </div>
+  </header>
+
+  <div class="page-hero">
+    <h1>📋 All Bookings</h1>
+    <p>Live view of every reservation made through AquaBook</p>
+  </div>
+
+  <!-- Stats Cards -->
+
+  <div class="stats-section" id="stats-section">
+    <div class="stat-card">
+      <div class="stat-icon">📅</div>
+      <div class="stat-number" id="stat-total">—</div>
+      <div class="stat-label">Total Bookings</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-icon">🎱</div>
+      <div class="stat-number" id="stat-8ball">—</div>
+      <div class="stat-label">8-Ball Pool</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-icon">🎯</div>
+      <div class="stat-number" id="stat-snooker">—</div>
+      <div class="stat-label">Snooker</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-icon">👑</div>
+      <div class="stat-number" id="stat-vip">—</div>
+      <div class="stat-label">VIP Room</div>
+    </div>
+  </div>
+
+  <!-- Table Section -->
+  <main class="table-section">
+    <div class="table-header">
+      <h2>Reservation List</h2>
+      <button class="refresh-btn" id="refresh-btn" onclick="loadBookings()">🔄 Refresh</button>
+    </div>
+
+    <!-- Filter buttons -->
+    <div class="filter-bar">
+      <button class="active" data-filter="all" onclick="filterBookings(this, 'all')">All</button>
+      <button data-filter="8ball" onclick="filterBookings(this, '8ball')">🎱 8-Ball</button>
+      <button data-filter="snooker" onclick="filterBookings(this, 'snooker')">🎯 Snooker</button>
+      <button data-filter="vip" onclick="filterBookings(this, 'vip')">👑 VIP Room</button>
+    </div>
+
+    <div class="table-wrapper">
+      <table id="bookings-table">
+        <thead>
+          <tr>
+            <th>#</th>
+            <th>Name</th>
+            <th>Phone</th>
+            <th>Date</th>
+            <th>Time Slot</th>
+            <th>Table Type</th>
+            <th>Booked On</th>
+            <th>Action</th>
+          </tr>
+        </thead>
+        <tbody id="bookings-body">
+        </tbody>
+      </table>
+    </div>
+
+    <!-- Loading / empty state shown here -->
+    <div id="table-state" class="state-msg">
+      <div class="state-icon">⏳</div>
+      <p>Loading bookings...</p>
+    </div>
+  </main>
+
+  <!-- Footer -->
+  <footer>
+    <p>&copy; 2026 AquaBook Booking. Created for Full Stack Mini Project.</p>
+  </footer>
+
+  <!-- Toast -->
+  <div class="toast" id="toast"></div>
+
+  <script>
+    const themeToggleBtn = document.getElementById('theme-toggle-btn');
+    const savedTheme = localStorage.getItem('theme') || 'dark';
+    document.documentElement.setAttribute('data-theme', savedTheme);
+    themeToggleBtn.innerText = savedTheme === 'dark' ? '☀️ Light Mode' : '🌙 Dark Mode';
+
+    themeToggleBtn.addEventListener('click', () => {
+      let theme = document.documentElement.getAttribute('data-theme');
+      theme = theme === 'dark' ? 'light' : 'dark';
+      document.documentElement.setAttribute('data-theme', theme);
+      localStorage.setItem('theme', theme);
+      themeToggleBtn.innerText = theme === 'dark' ? '☀️ Light Mode' : '🌙 Dark Mode';
+    });
+
+    // ── Global bookings store ──
+    let allBookings = [];
+    let currentFilter = 'all';
+
+    // ── Toast ──
+    function showToast(msg, type = 'success') {
+      const toast = document.getElementById('toast');
+      toast.textContent = msg;
+      toast.className = `toast show ${type === 'success' ? 'ok' : 'err'}`;
+      setTimeout(() => toast.classList.remove('show'), 3000);
+    }
+
+    // ── Label helpers ──
+    function tableLabel(type) {
+      if (type === '8ball')   return '<span class="badge badge-8ball">🎱 8-Ball</span>';
+      if (type === 'snooker') return '<span class="badge badge-snooker">🎯 Snooker</span>';
+      if (type === 'vip')     return '<span class="badge badge-vip">👑 VIP Room</span>';
+      return type;
+    }
+
+    function formatDate(dateStr) {
+      if (!dateStr) return '—';
+      const d = new Date(dateStr);
+      return d.toLocaleDateString('en-IN', { day: '2-digit', month: 'short', year: 'numeric' });
+    }
+
+    function formatCreatedAt(iso) {
+      const d = new Date(iso);
+      return d.toLocaleDateString('en-IN', { day: '2-digit', month: 'short', year: 'numeric' });
+    }
+
+    // ── Update stats ──
+    function updateStats(bookings) {
+      document.getElementById('stat-total').textContent   = bookings.length;
+      document.getElementById('stat-8ball').textContent   = bookings.filter(b => b.tableType === '8ball').length;
+      document.getElementById('stat-snooker').textContent = bookings.filter(b => b.tableType === 'snooker').length;
+      document.getElementById('stat-vip').textContent     = bookings.filter(b => b.tableType === 'vip').length;
+    }
+
+    // ── Render table rows ──
+
+    function renderTable(bookings) {
+      const tbody  = document.getElementById('bookings-body');
+      const stateDiv = document.getElementById('table-state');
+
+      if (bookings.length === 0) {
+        tbody.innerHTML = '';
+        stateDiv.style.display = 'block';
+        stateDiv.innerHTML = '<div class="state-icon">📭</div><p>No bookings found for this filter.</p>';
+        return;
+      }
+
+      stateDiv.style.display = 'none';
+      tbody.innerHTML = bookings.map((b, i) => `
+        <tr id="row-${b._id}">
+          <td><strong>${i + 1}</strong></td>
+          <td><strong>${b.name}</strong></td>
+          <td>${b.phone || '<span style="color:#666">—</span>'}</td>
+          <td>${b.date}</td>
+          <td>${b.timeSlot ? `<span class="time-chip">${b.timeSlot}</span>` : '<span style="color:#666">—</span>'}</td>
+          <td>${tableLabel(b.tableType)}</td>
+          <td>${formatCreatedAt(b.createdAt)}</td>
+          <td>
+            <button class="cancel-btn" id="cancel-${b._id}" onclick="cancelBooking('${b._id}')">
+              Cancel
+            </button>
+          </td>
+        </tr>
+      `).join('');
+    }
+
+    // ── Filter ──
+    function filterBookings(btn, filter) {
+      // Update active button
+      document.querySelectorAll('.filter-bar button').forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+      currentFilter = filter;
+
+      const filtered = filter === 'all'
+        ? allBookings
+        : allBookings.filter(b => b.tableType === filter);
+
+      renderTable(filtered);
+    }
+
+    // ── Load bookings from API ──
+    async function loadBookings() {
+      const stateDiv = document.getElementById('table-state');
+      const tbody = document.getElementById('bookings-body');
+      
+      tbody.innerHTML = '';
+      stateDiv.style.display = 'block';
+      stateDiv.innerHTML = '<div class="state-icon">⏳</div><p>Loading bookings...</p>';
+
+      try {
+        const res  = await fetch('http://localhost:5000/api/bookings');
+        const data = await res.json();
+
+        allBookings = data;
+        updateStats(data);
+
+        const filtered = currentFilter === 'all'
+          ? allBookings
+          : allBookings.filter(b => b.tableType === currentFilter);
+
+        renderTable(filtered);
+      } catch (err) {
+        stateDiv.style.display = 'block';
+        stateDiv.innerHTML = `
+          <div class="state-icon">🚫</div>
+          <p>Could not connect to backend. Make sure the server is running on port 5000.</p>
+        `;
+      }
+    }
+
+    // ── Cancel / Delete booking ──
+
+    async function cancelBooking(id) {
+      if (!confirm('Are you sure you want to cancel this booking?')) return;
+
+      const btn = document.getElementById(`cancel-${id}`);
+      btn.disabled = true;
+      btn.textContent = 'Cancelling...';
+
+      try {
+        const res = await fetch(`http://localhost:5000/api/bookings/${id}`, {
+          method: 'DELETE'
+        });
+        const data = await res.json();
+
+        if (res.ok) {
+          // Remove row with fade
+          const row = document.getElementById(`row-${id}`);
+          row.style.opacity = '0';
+          row.style.transition = 'opacity 0.3s ease';
+          setTimeout(() => {
+            allBookings = allBookings.filter(b => b._id !== id);
+            updateStats(allBookings);
+            const filtered = currentFilter === 'all'
+              ? allBookings
+              : allBookings.filter(b => b.tableType === currentFilter);
+            renderTable(filtered);
+          }, 300);
+          showToast('✅ Booking cancelled successfully.', 'success');
+        } else {
+          showToast(`❌ Error: ${data.error}`, 'error');
+          btn.disabled = false;
+          btn.textContent = 'Cancel';
+        }
+      } catch (err) {
+        showToast('❌ Could not connect to server.', 'error');
+        btn.disabled = false;
+        btn.textContent = 'Cancel';
+      }
+    }
+
+    // ── Load stats from /api/stats (Mongoose aggregation) ──
+    async function loadStats() {
+      try {
+        const res  = await fetch('http://localhost:5000/api/stats');
+        const data = await res.json();
+        if (!res.ok) return;
+
+        document.getElementById('stat-total').textContent   = data.total;
+        document.getElementById('stat-8ball').textContent   = data.byType['8ball']   || 0;
+        document.getElementById('stat-snooker').textContent = data.byType['snooker'] || 0;
+        document.getElementById('stat-vip').textContent     = data.byType['vip']     || 0;
+
+        // Add Most Booked Date card if bookings exist
+        const statsSection = document.getElementById('stats-section');
+        if (statsSection && !document.getElementById('stat-most-booked') && data.mostBookedDate.date !== 'N/A') {
+          const card = document.createElement('div');
+          card.className = 'stat-card';
+          card.innerHTML = `
+            <div class="stat-icon">🔥</div>
+            <div class="stat-number" id="stat-most-booked" style="font-size:1.3rem;">${data.mostBookedDate.date}</div>
+            <div class="stat-label">Most Booked Date (${data.mostBookedDate.count} bookings)</div>
+          `;
+          statsSection.appendChild(card);
+        }
+      } catch (err) {
+        console.warn('Stats fetch failed:', err.message);
+      }
+    }
+
+    // ── Init ──
+    loadBookings();
+    loadStats();
+  </script>
+
+</body>
+</html>
