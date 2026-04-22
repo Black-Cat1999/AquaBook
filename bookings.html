@@ -328,19 +328,6 @@
   <!-- Toast -->
   <div class="toast" id="toast"></div>
 
-  <script>
-    const themeToggleBtn = document.getElementById('theme-toggle-btn');
-    const savedTheme = localStorage.getItem('theme') || 'dark';
-    document.documentElement.setAttribute('data-theme', savedTheme);
-    themeToggleBtn.innerText = savedTheme === 'dark' ? '☀️ Light Mode' : '🌙 Dark Mode';
-
-    themeToggleBtn.addEventListener('click', () => {
-      let theme = document.documentElement.getAttribute('data-theme');
-      theme = theme === 'dark' ? 'light' : 'dark';
-      document.documentElement.setAttribute('data-theme', theme);
-      localStorage.setItem('theme', theme);
-      themeToggleBtn.innerText = theme === 'dark' ? '☀️ Light Mode' : '🌙 Dark Mode';
-    });
 
     // ── Global bookings store ──
     let allBookings = [];
@@ -532,5 +519,6 @@
     loadStats();
   </script>
 
+  <script src="main.js"></script>
 </body>
 </html>

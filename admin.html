@@ -364,17 +364,6 @@
   <script>
     const API = 'https://aquabook-u419.onrender.com';
 
-    // ── Theme ──
-    const themeBtn = document.getElementById('theme-toggle-btn');
-    const savedTheme = localStorage.getItem('theme') || 'dark';
-    document.documentElement.setAttribute('data-theme', savedTheme);
-    themeBtn.innerText = savedTheme === 'dark' ? '☀️ Light Mode' : '🌙 Dark Mode';
-    themeBtn.addEventListener('click', () => {
-      const t = document.documentElement.getAttribute('data-theme') === 'dark' ? 'light' : 'dark';
-      document.documentElement.setAttribute('data-theme', t);
-      localStorage.setItem('theme', t);
-      themeBtn.innerText = t === 'dark' ? '☀️ Light Mode' : '🌙 Dark Mode';
-    });
 
     // ── Toast ──
     function toast(msg, type = 'ok') {

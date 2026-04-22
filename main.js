@@ -1,21 +1,18 @@
+// --- Feature 9: Dark/Light Theme Toggle ---
+// 1. Initialize theme immediately to prevent flickering
+const savedTheme = localStorage.getItem('theme') || 'dark';
+document.documentElement.setAttribute('data-theme', savedTheme);
+
 document.addEventListener('DOMContentLoaded', () => {
-  // --- Feature 9: Dark/Light Theme Toggle ---
   const themeToggleBtn = document.getElementById('theme-toggle-btn');
 
-  // Check for saved theme in localStorage
-  const currentTheme = localStorage.getItem('theme') || 'dark';
-  document.documentElement.setAttribute('data-theme', currentTheme);
-  updateToggleText(currentTheme);
-
+  // 2. Update button text once DOM is ready
   if (themeToggleBtn) {
+    updateToggleText(savedTheme);
+    
     themeToggleBtn.addEventListener('click', () => {
       let theme = document.documentElement.getAttribute('data-theme');
-
-      if (theme === 'dark') {
-        theme = 'light';
-      } else {
-        theme = 'dark';
-      }
+      theme = (theme === 'dark') ? 'light' : 'dark';
 
       document.documentElement.setAttribute('data-theme', theme);
       localStorage.setItem('theme', theme);
