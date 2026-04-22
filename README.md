@@ -30,40 +30,39 @@ This project successfully integrates all 9 requested features:
 
 ---
 
+## 🚀 Deployment Links
+- **Frontend (Vercel):** [https://aqua-book-tau.vercel.app/](https://aqua-book-tau.vercel.app/)
+- **Backend (Render):** [https://aquabook-u419.onrender.com/](https://aquabook-u419.onrender.com/)
+
+---
+
 ## 🛠️ Technology Stack
-- **HTML5:** Semantic architecture (`<main>`, `<section>`, `<article>`, `<header>`, `<footer>`).
-- **CSS3:** Custom Variables, Flexbox, Grid Layouts, rich gradients, and smooth transition animations.
-- **Vanilla JavaScript:** Event Listeners, Fetch API (async/await), DOM Manipulation, Local Storage.
+- **Frontend:** HTML5, CSS3, Vanilla JavaScript
+- **Backend:** Node.js, Express.js
+- **Database:** MongoDB Atlas (Mongoose)
 
 ---
 
 ## 📂 Project Structure
-
 ```text
-├── index.html           # Landing page (Hero, Features, Testimonials, Modal)
-├── facilities.html      # Portfolio Map (Table Gallery with filters, Skills, PDF)
-├── about.html           # Blog style page (Typography focus)
-├── support.html         # Contact Form, Character Counter, FAQ, Currency Converter
-├── style.css            # Global CSS, theming variables, responsive media queries
-├── main.js              # Interactivity, DOM manipulation, API handling
-├── pricing-brochure.pdf # Required PDF download
-└── images/              # Assets for the website
-    ├── hero.png
-    ├── about-hero.webp
-    ├── 8ball-1.jpg
-    ├── snooker-1.jpg
-    └── vip-1.jpg
+├── index.html           # Landing page
+├── user.html            # Main booking form with live validation
+├── payment.html         # Mock payment gateway & processing
+├── bookings.html        # Public view of all reservations
+├── admin.html           # Admin dashboard for managing bookings
+├── style.css            # Global CSS & Design System
+├── main.js              # Frontend logic & API handlers
+└── backend/             # Node.js Express server & MongoDB models
 ```
 
 ---
 
 ## 🚀 Running Locally
 
-Because this project is built entirely strictly with standard-compliant HTML/CSS/JS, no build step or node package installation is required.
-
 1. Clone the repository: `git clone <your-repo-link>`
 2. Open the directory.
-3. Open `index.html` in your favorite web browser, or use VS Code's **Live Server** extension for real-time CSS/JS reloading.
+3. Start the backend: `cd backend && npm install && npm start`
+4. Open `index.html` in your browser.
 
 ## 🤝 Project By
 Created for Full Stack Development Mini Project.

@@ -188,7 +188,7 @@ document.addEventListener('DOMContentLoaded', () => {
       bookingStatus.textContent = 'Submitting...';
 
       try {
-        const response = await fetch('http://localhost:5000/api/bookings', {
+        const response = await fetch('https://aquabook-u419.onrender.com/api/bookings', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({ name, phone, date, timeSlot, tableType })
@@ -243,7 +243,7 @@ document.addEventListener('DOMContentLoaded', () => {
     if (!grid) return;
 
     try {
-      const res  = await fetch('http://localhost:5000/api/reviews');
+      const res  = await fetch('https://aquabook-u419.onrender.com/api/reviews');
       const data = await res.json();
 
       if (!data.length) {
@@ -329,7 +329,7 @@ document.addEventListener('DOMContentLoaded', () => {
       reviewStatus.textContent = 'Posting your review...';
 
       try {
-        const res  = await fetch('http://localhost:5000/api/reviews', {
+        const res  = await fetch('https://aquabook-u419.onrender.com/api/reviews', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({ name, tableType, rating: Number(rating), comment })
@@ -386,7 +386,7 @@ document.addEventListener('DOMContentLoaded', () => {
       contactStatus.textContent = 'Submitting your message...';
 
       try {
-        const res  = await fetch('http://localhost:5000/api/contact', {
+        const res  = await fetch('https://aquabook-u419.onrender.com/api/contact', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({ name, email, message })
@@ -425,7 +425,7 @@ document.addEventListener('DOMContentLoaded', () => {
     if (!statTotal) return; // Not on bookings page, skip
 
     try {
-      const res  = await fetch('http://localhost:5000/api/stats');
+      const res  = await fetch('https://aquabook-u419.onrender.com/api/stats');
       const data = await res.json();
 
       if (!res.ok) return;

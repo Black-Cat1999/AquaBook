@@ -350,9 +350,9 @@
 
   <script src="main.js"></script>
   <script>
-    const API = 'http://localhost:5000';
+    const API = 'https://aquabook-u419.onrender.com';
     let allSlots = ['10:00 AM', '12:00 PM', '02:00 PM', '04:00 PM', '06:00 PM', '08:00 PM'];
-    let selectedSlot = '';
+    window.selectedSlot = '';
 
     // BUG 6 Fix: Set min date
     const today = new Date().toISOString().split('T')[0];
@@ -386,7 +386,7 @@
       } else {
         // BUG 2 Fix: Clear grid
         document.getElementById('slot-container').innerHTML = '<div class="slot-prompt">📅 Please select a date and table type to see available slots.</div>';
-        selectedSlot = '';
+        window.selectedSlot = '';
         document.getElementById('b-slot').value = '';
         document.getElementById('selected-slot-display').textContent = 'None selected';
         if (window.checkAllFieldsValid) window.checkAllFieldsValid();
@@ -404,7 +404,7 @@
       container.className = 'slot-grid';
 
       // Reset any previously selected slot
-      selectedSlot = '';
+      window.selectedSlot = '';
       document.getElementById('b-slot').value = '';
       document.getElementById('selected-slot-display').textContent = 'None selected';
 
@@ -435,8 +435,8 @@
       document.querySelectorAll('.slot-btn').forEach(b => b.classList.remove('selected'));
       const btn = document.getElementById(`slot-${slot.replace(/\s+/g, '')}`);
       if (btn) btn.classList.add('selected');
-
-      selectedSlot = slot;
+      
+      window.selectedSlot = slot;
       document.getElementById('b-slot').value = slot;
       document.getElementById('selected-slot-display').textContent = slot;
       
@@ -455,7 +455,7 @@
       const phone     = document.getElementById('b-phone').value.trim();
       const date      = document.getElementById('b-date').value;
       const tableType = document.getElementById('b-table').value;
-      const timeSlot  = selectedSlot;
+      const timeSlot  = window.selectedSlot;
 
       // Save to sessionStorage
       const bookingData = { name, phone, date, timeSlot, tableType };
@@ -488,7 +488,7 @@
       document.getElementById('b-table').value  = '';
       document.getElementById('slot-container').innerHTML = '<div class="slot-prompt">📅 Please select a date and table type to see available slots.</div>';
       document.getElementById('slot-container').className = '';
-      selectedSlot = '';
+      window.selectedSlot = '';
       document.getElementById('b-slot').value = '';
       document.getElementById('selected-slot-display').textContent = 'None selected';
       document.getElementById('form-status').textContent = '';

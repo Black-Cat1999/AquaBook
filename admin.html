@@ -275,7 +275,7 @@
 
   <!-- Hero -->
   <div class="hero">
-    <h1><i data-lucide="shield-check" style="width:40px;height:40px;vertical-align:middle;margin-right:12px;"></i>Admin Dashboard</h1>
+    <h1>⚙ Admin Dashboard</h1>
     <p>Manage all bookings and view analytics.</p>
   </div>
 
@@ -284,27 +284,27 @@
     <!-- ── Stats ── -->
     <div class="stats-grid" id="stats-grid">
       <div class="stat-card">
-        <div class="stat-icon"><i data-lucide="bar-chart-3"></i></div>
+        <div class="stat-icon">📊</div>
         <div class="stat-number" id="s-total">0</div>
         <div class="stat-label">Total Bookings</div>
       </div>
       <div class="stat-card">
-        <div class="stat-icon"><i data-lucide="circle"></i></div>
+        <div class="stat-icon">🎱</div>
         <div class="stat-number" id="s-8ball">0</div>
         <div class="stat-label">8-Ball Pool</div>
       </div>
       <div class="stat-card">
-        <div class="stat-icon"><i data-lucide="target"></i></div>
+        <div class="stat-icon">🎯</div>
         <div class="stat-number" id="s-snooker">0</div>
         <div class="stat-label">Snooker</div>
       </div>
       <div class="stat-card">
-        <div class="stat-icon"><i data-lucide="crown"></i></div>
+        <div class="stat-icon">👑</div>
         <div class="stat-number" id="s-vip">0</div>
         <div class="stat-label">VIP Room</div>
       </div>
       <div class="stat-card">
-        <div class="stat-icon"><i data-lucide="mail"></i></div>
+        <div class="stat-icon">✉️</div>
         <div class="stat-number" id="s-contacts">0</div>
         <div class="stat-label">Support Msgs</div>
       </div>
@@ -362,7 +362,7 @@
   <div class="toast" id="toast"></div>
 
   <script>
-    const API = 'http://localhost:5000';
+    const API = 'https://aquabook-u419.onrender.com';
 
     // ── Theme ──
     const themeBtn = document.getElementById('theme-toggle-btn');
@@ -596,8 +596,7 @@
         loadStats(data.length);
 
         if (!data.length) {
-          state.innerHTML = '<i data-lucide="inbox" class="stat-icon"></i><p>No messages found.</p>';
-          lucide.createIcons({ root: state });
+          state.innerHTML = '<div style="font-size:2.5rem; margin-bottom:10px;">📭</div><p>No messages found.</p>';
           return;
         }
 
@@ -606,17 +605,15 @@
             <div class="msg-header">
               <div>
                 <div class="msg-name">${m.name}</div>
-                <div class="msg-email"><i data-lucide="mail" style="width:12px;height:12px;"></i> ${m.email}</div>
+                <div class="msg-email">✉️ ${m.email}</div>
               </div>
               <div class="msg-date">${fmtDate(m.createdAt)}</div>
             </div>
             <div class="msg-text">${m.message}</div>
           </div>
         `).join('');
-        lucide.createIcons();
       } catch (e) {
-        state.innerHTML = '<i data-lucide="wifi-off" class="stat-icon"></i><p>Could not fetch messages.</p>';
-        lucide.createIcons({ root: state });
+        state.innerHTML = '<div style="font-size:2.5rem; margin-bottom:10px;">🚫</div><p>Could not fetch messages.</p>';
       }
     }
 
@@ -628,5 +625,6 @@
     }
     loadAll();
   </script>
+  <script src="main.js"></script>
 </body>
 </html>

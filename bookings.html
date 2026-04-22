@@ -437,7 +437,7 @@
       stateDiv.innerHTML = '<div class="state-icon">⏳</div><p>Loading bookings...</p>';
 
       try {
-        const res  = await fetch('http://localhost:5000/api/bookings');
+        const res  = await fetch('https://aquabook-u419.onrender.com/api/bookings');
         const data = await res.json();
 
         allBookings = data;
@@ -467,7 +467,7 @@
       btn.textContent = 'Cancelling...';
 
       try {
-        const res = await fetch(`http://localhost:5000/api/bookings/${id}`, {
+        const res = await fetch(`https://aquabook-u419.onrender.com/api/bookings/${id}`, {
           method: 'DELETE'
         });
         const data = await res.json();
@@ -501,7 +501,7 @@
     // ── Load stats from /api/stats (Mongoose aggregation) ──
     async function loadStats() {
       try {
-        const res  = await fetch('http://localhost:5000/api/stats');
+        const res  = await fetch('https://aquabook-u419.onrender.com/api/stats');
         const data = await res.json();
         if (!res.ok) return;
 
