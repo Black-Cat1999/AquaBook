@@ -258,6 +258,7 @@
 </head>
 <body>
   <!-- Navigation -->
+  <header>
     <div class="nav-container">
       <div class="logo">AquaBook</div>
       <nav>
@@ -609,8 +610,7 @@
     // ── Init ──
     function loadAll() {
       loadBookings();
-      loadContacts();
-      loadStats();
+      loadContacts(); // loadContacts calls loadStats(contactCount) internally
     }
     loadAll();
   </script>

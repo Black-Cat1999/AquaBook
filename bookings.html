@@ -328,7 +328,7 @@
   <!-- Toast -->
   <div class="toast" id="toast"></div>
 
-
+  <script>
     // ── Global bookings store ──
     let allBookings = [];
     let currentFilter = 'all';
@@ -337,7 +337,7 @@
     function showToast(msg, type = 'success') {
       const toast = document.getElementById('toast');
       toast.textContent = msg;
-      toast.className = `toast show ${type === 'success' ? 'ok' : 'err'}`;
+      toast.className = `toast show ${type === 'success' ? 'success' : 'error'}`;
       setTimeout(() => toast.classList.remove('show'), 3000);
     }
 
